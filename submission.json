@@ -1,0 +1,10 @@
+{
+  "team": "TAKIM ADI",
+  "members": [{ "name": "ADINIZ", "email": "EMAIL" }],
+  "repo": "https://github.com/KULLANICI/REPO",
+  "commit": "94a470b",
+  "run_command": "python3 examples/agent_builder.py {case_folder} {mock_url}",
+  "workflow": "submission/final.workflow.json",
+  "trace": "traces/final.log",
+  "mock_url": "https://freya-bank-mock.freya-mock.workers.dev"
+}
