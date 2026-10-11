@@ -1,8 +1,8 @@
 {
-  "team": "TAKIM ADI",
-  "members": [{ "name": "ADINIZ", "email": "EMAIL" }],
-  "repo": "https://github.com/KULLANICI/REPO",
-  "commit": "94a470b",
+  "team": "Chillers",
+  "members": [{ "name": "Şehri Sena Demirbaş", "email": "senadmrbsx@gmail.com" },{ "name": "Mehmet Doğukan Özer", "email": "mehmetdogukanozer2@gmail.com" }],
+  "repo": "https://github.com/mehmetdogukanozer/freyahackathon.git",
+  "commit": "c328338",
   "run_command": "python3 examples/agent_builder.py {case_folder} {mock_url}",
   "workflow": "submission/final.workflow.json",
   "trace": "traces/final.log",
