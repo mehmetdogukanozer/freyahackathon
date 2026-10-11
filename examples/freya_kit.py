@@ -30,7 +30,7 @@ HDR = {"type": "object", "properties": {"Content-Type": {"type": "string", "defa
 
 FRAGMENT_RULE = (
     "An empty message, \"...\" or a message of only filler sounds (hmm, ee) is SILENCE: if the brief has a silence rule, follow it exactly and let the code count consecutive silent turns. Any other message that stops in the middle of a sentence, is only chat, or does not answer the pending question is NOT a refusal, "
-    "NOT a wrong answer and NOT an attempt. Reply with ONE short neutral line (for example \"Sorry, I didn't catch that.\"), never repeat a figure, "
+    "NOT a wrong answer and NOT an attempt. Reply with ONE short human line (for example \"I understand.\" when the caller is venting or chatting, or \"Sorry, I didn't catch that.\" for a cut-off), then, when the pending question is a choice question, ask it again in full with its examples; never repeat a figure, "
     "a date or an offer, then wait. Never end the call, never say you will end it (except by the brief's silence rule), and never let chat or a cut-off message count toward any limit. "
     "Only a clear spoken no counts as a refusal. If a message holds the answer plus chat, use the answer and ignore the chat. "
     "A date or an amount that is cut off is not a date or an amount: ask again, never guess, and never fall back to a default because the message was cut. "
