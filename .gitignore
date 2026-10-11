@@ -1,0 +1,13 @@
+# secrets and local state: never commit
+.env
+.freya-agents.json
+.freya-lab.json
+.freya-*.json
+.personas.json
+# leftovers of runs
+archive/
+out/
+results/
+__pycache__/
+*.pyc
+*.bak
