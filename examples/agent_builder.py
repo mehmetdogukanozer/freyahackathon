@@ -140,11 +140,13 @@ async def main(args):
         effort=os.environ.get("BUILDER_EFFORT") or None,   # low, medium, high, xhigh or max; unset = the model default
         # A test run takes up to 11 minutes. Let a command run that long, and keep it in the foreground:
         # the builder stops when Claude ends its turn, so a test left in the background is never read.
-        env={"BASH_DEFAULT_TIMEOUT_MS": "900000", "BASH_MAX_TIMEOUT_MS": "1200000", "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1"},
+        env={"BASH_DEFAULT_TIMEOUT_MS": "900000", "BASH_MAX_TIMEOUT_MS": "1200000", "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1",
+             "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"},   # the builder must not read anybody's personal memory notes
     )
     prompt = "Use the build-phone-agent skill to build a phone agent for: " + " ".join(briefs)
     if apis:
         prompt += ". The tool API file for it: " + " ".join(apis)
+    prompt += ". Write all your messages in English."
     with trace.open("w", encoding="utf-8") as out:
         head = {"start": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "briefs": briefs, "tool_api": apis, "model": options.model, "effort": options.effort, "time_limit_s": TIME_LIMIT_S}
         out.write(json.dumps(head) + "\n")
