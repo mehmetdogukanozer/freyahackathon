@@ -135,6 +135,7 @@ async def main(args):
     log = Log(KIT / "traces" / ("-".join(slots) + ".log"))
     options = ClaudeAgentOptions(
         cwd=KIT,
+        add_dirs=[str(pathlib.Path(briefs[0]).resolve())] if folder else [],   # a case folder outside the kit may be read
         model=os.environ.get("BUILDER_MODEL", "claude-sonnet-5-5"),
         skills=["build-phone-agent"],          # the skill in .claude/skills
         setting_sources=["project"],           # only this folder's settings, not your own
@@ -148,7 +149,7 @@ async def main(args):
              "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"},   # the builder must not read anybody's personal memory notes
     )
     if folder:
-        prompt = ("Use the build-phone-agent skill to build a phone agent for the case folder: " + briefs[0]
+        prompt = ("Use the build-phone-agent skill to build a phone agent for the case folder: '" + str(pathlib.Path(briefs[0]).resolve()) + "'"
                   + ". Read BRIEF.md in it first, then README.md and every document they name. Use the slot name final")
         if urls:
             prompt += ". The bank's services run at this mock: " + urls[0] + " (the service contract in the folder gives the paths and shapes; every tool calls this base URL)"
