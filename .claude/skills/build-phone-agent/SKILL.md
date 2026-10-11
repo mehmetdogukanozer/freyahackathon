@@ -9,6 +9,14 @@ Work from the kit folder. Use only what the brief files and their tool API file 
 
 The brief may be a clean specification or raw bank material (meeting notes, a mail, a policy extract, a memo that changes an earlier text, a code list). Rules, limits, calendar, identity questions, outcome codes and tool field names differ from brief to brief. Read everything you are given. Anything the brief can tell you, take from the brief.
 
+## When the input is a case folder
+
+The request may name a folder instead of brief files, plus the address of the bank's mock service. Then: read `BRIEF.md` first, then `README.md`, then every document it names (`sources/`, `test-environment/`, `example-scenarios.md`, drawings). Read all of them: the documents were written months apart and disagree, so newer and more specific ones win (note each conflict and the winner in the rules file). The slot is `final`. The tool paths, fields and answers come from the service contract and the test environment files. Every tool calls the mock address you were given as its base URL. Do not call the practice bank. Call variables named in the brief (such as the customer number and `now`) arrive with the call: read them as `{{name}}` in prompts and by name in code, never ask the customer for what the brief says is already known, and take every date decision from `now`.
+
+**Language.** The agent speaks the language of the customers in the brief (for example Turkish). The system prompt, fixed spoken lines, extraction descriptions and the kit's rule texts (`freya_kit.UNIVERSAL_RULES`, the fragment line "Sorry, I didn't catch that") are written or translated into that language. Say numbers, currencies and dates the way a person says them in that language. Test with `example-scenarios.md` and with your own personas in that language.
+
+**Test with the mock.** Before you build, call each mock path once with the test customers listed in the pack and compare the answers to the pack. If the mock is wrong, say so in the final line; never change what the pack says.
+
 ## Time (30 minutes in total, tests included)
 
 At the start run `python3 -c "import time;print(int(time.time()))"` and note the number. Check the clock before every test with the same command.

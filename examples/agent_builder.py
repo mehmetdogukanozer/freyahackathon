@@ -2,6 +2,7 @@
 
     pip install claude-agent-sdk
     python3 examples/agent_builder.py briefs/brief-a.md [briefs/brief-a.openapi.json]
+    python3 examples/agent_builder.py <case_folder> <mock_url>      # a whole case folder and the address of the mock
 
 Arguments: one brief file (.md or any text) and, optionally, its tool API file (.json). Several briefs are allowed;
 a .json argument is always read as a tool API file. The slot of a brief is its file name without the extension.
@@ -71,10 +72,12 @@ def start_clean():
 
 
 def split_args(args):
-    """Separate the brief files from the tool API files (.json)."""
-    briefs = [a for a in args if not a.lower().endswith(".json")]
-    apis = [a for a in args if a.lower().endswith(".json")]
-    return briefs, apis
+    """Separate the brief files (or one case folder) from the tool API files (.json) and the mock URL (http...)."""
+    urls = [a for a in args if a.lower().startswith("http")]
+    rest = [a for a in args if a not in urls]
+    briefs = [a for a in rest if not a.lower().endswith(".json")]
+    apis = [a for a in rest if a.lower().endswith(".json")]
+    return briefs, apis, urls
 
 
 class Log:
@@ -116,13 +119,14 @@ def export_agents(slots, out, log):
 
 async def main(args):
     load_env()
-    briefs, apis = split_args(args)
+    briefs, apis, urls = split_args(args)
     if not briefs:
         sys.exit("give at least one brief file (and its tool API .json file)")
     missing = [k for k in ("FREYA_API_KEY", "FREYA_BANK_TEAM_KEY") if not os.environ.get(k)]
     if missing:
         sys.exit("missing: " + ", ".join(missing) + " (set them or put them in .env, see env.example)")
-    slots = [pathlib.Path(b).stem for b in briefs]
+    folder = len(briefs) == 1 and pathlib.Path(briefs[0]).is_dir()
+    slots = ["final"] if folder else [pathlib.Path(b).stem for b in briefs]
     start_clean()
     started = time.time()
     stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -143,7 +147,13 @@ async def main(args):
         env={"BASH_DEFAULT_TIMEOUT_MS": "900000", "BASH_MAX_TIMEOUT_MS": "1200000", "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1",
              "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"},   # the builder must not read anybody's personal memory notes
     )
-    prompt = "Use the build-phone-agent skill to build a phone agent for: " + " ".join(briefs)
+    if folder:
+        prompt = ("Use the build-phone-agent skill to build a phone agent for the case folder: " + briefs[0]
+                  + ". Read BRIEF.md in it first, then README.md and every document they name. Use the slot name final")
+        if urls:
+            prompt += ". The bank's services run at this mock: " + urls[0] + " (the service contract in the folder gives the paths and shapes; every tool calls this base URL)"
+    else:
+        prompt = "Use the build-phone-agent skill to build a phone agent for: " + " ".join(briefs)
     if apis:
         prompt += ". The tool API file for it: " + " ".join(apis)
     prompt += ". Write all your messages in English."
