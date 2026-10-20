@@ -22,7 +22,6 @@ One run of the builder, 21 minutes (limit: 30), about $6 of model cost:
 - checked the mock bank against the pack's answers (616 answers), ran the agent's code locally, then ran its own Turkish customers on the platform and fixed what failed.
 
 Evidence: `traces/final.log` (plain text), `traces/20261011-210044.jsonl` (full trace), `submission/final.workflow.json` (the exported phone agent), `submission.json`.
-`final-mock/` is a small mock of the bank's statement service that came with the final case; it is not part of the builder.
 
 ## What the skill teaches the builder
 
